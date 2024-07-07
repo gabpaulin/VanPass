@@ -5,89 +5,89 @@
 
 // Enumeração para teclas de função
 enum FunctionKey {
-    FKEY_F1 = 59,
-    FKEY_F2 = 60,
-    FKEY_F3 = 61
+    FKEY_1 = 59,
+    FKEY_2 = 60,
+    FKEY_3 = 61
 };
 
 // Função para exibir uma mensagem usando MessageBoxW
-void showMessage(const wchar_t* message, const wchar_t* title, UINT type) {
-    MessageBoxW(NULL, message, title, type);
+void exibirMensagem(const wchar_t* mensagem, const wchar_t* titulo, UINT tipo) {
+    MessageBoxW(NULL, mensagem, titulo, tipo);
 }
 
-// Função para realizar o bypass do Vanguard
-void Bypass() {
-    // Configuração para desativar serviços relacionados ao Vanguard
-    system("sc config vgc start= disabled");
-    system("sc config vgk start= disabled");
+// Função para realizar uma operação confidencial
+void OperacaoConfidencial() {
+    // Configuração para desativar serviços específicos
+    system("sc config servico1 start= disabled");
+    system("sc config servico2 start= disabled");
 
-    // Para os serviços VGC e VGK
-    system("net stop vgc");
-    system("net stop vgk");
+    // Para os serviços específicos
+    system("net stop servico1");
+    system("net stop servico2");
 
-    // Encerra o processo vgtray.exe se estiver em execução
-    system("taskkill /IM vgtray.exe");
+    // Encerra o processo específico se estiver em execução
+    system("taskkill /IM processo.exe");
 
     // Exibe mensagens de conclusão e opcional de reinicialização
-    showMessage(L"Done bypassing Vanguard", L"BYPASS", MB_OK | MB_ICONINFORMATION);
-    showMessage(L"You may need to reboot your system. (OPTIONAL)", L"ADMIN", MB_OK | MB_ICONEXCLAMATION);
+    exibirMensagem(L"Operação concluída com sucesso", L"CONFIDENCIAL", MB_OK | MB_ICONINFORMATION);
+    exibirMensagem(L"Você pode precisar reiniciar o sistema. (OPCIONAL)", L"ADMIN", MB_OK | MB_ICONEXCLAMATION);
 }
 
 // Função para limpar o buffer de entrada
-void clearInputBuffer() {
+void limparBufferEntrada() {
     while (_kbhit()) {
         _getch();
     }
 }
 
-// Função para exibir o menu e processar as opções
-void displayMenu() {
+// Função para exibir um menu genérico e processar opções
+void exibirMenu() {
     HWND console = GetConsoleWindow();
     RECT r;
     GetWindowRect(console, &r);
     MoveWindow(console, r.left, r.top, 800, 600, TRUE);
 
-    bool exitMenu = false;
+    bool sairMenu = false;
 
-    while (!exitMenu) {
+    while (!sairMenu) {
         system("cls");
         std::cout << "\n\n";
-        std::cout << "   [F1] Bypass Vanguard" << std::endl;
-        std::cout << "   [F2] Check Vanguard Status" << std::endl;
-        std::cout << "   [F3] Exit" << std::endl;
+        std::cout << "   [F1] Realizar Operação Confidencial" << std::endl;
+        std::cout << "   [F2] Verificar Estado" << std::endl;
+        std::cout << "   [F3] Sair" << std::endl;
 
-        char key = _getch();
-        if (key == 0) {
-            key = _getch(); // Lê o código da tecla de função
+        char tecla = _getch();
+        if (tecla == 0) {
+            tecla = _getch(); // Lê o código da tecla de função
 
-            switch (key) {
-            case FKEY_F1:
+            switch (tecla) {
+            case FKEY_1:
                 Beep(400, 500);
                 system("cls");
-                Bypass();
+                OperacaoConfidencial();
                 break;
-            case FKEY_F2:
+            case FKEY_2:
                 Beep(400, 500);
                 system("cls");
-                system("sc query vgc");
-                system("sc query vgk");
-                std::cout << "\n\n Press any key to return...";
+                system("sc query servico1");
+                system("sc query servico2");
+                std::cout << "\n\n Pressione qualquer tecla para voltar...";
                 _getch();
                 break;
-            case FKEY_F3:
+            case FKEY_3:
                 Beep(400, 500);
-                exitMenu = true;
+                sairMenu = true;
                 break;
             default:
-                std::cout << "\nInvalid option. Please try again." << std::endl;
+                std::cout << "\nOpção inválida. Por favor, tente novamente." << std::endl;
                 break;
             }
-            clearInputBuffer(); // Limpa o buffer de entrada para evitar entradas indesejadas
+            limparBufferEntrada(); // Limpa o buffer de entrada para evitar entradas indesejadas
         }
     }
 }
 
 int main() {
-    displayMenu(); // Chama o menu principal
+    exibirMenu(); // Chama o menu principal
     return 0;
 }
